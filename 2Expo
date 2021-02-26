@@ -1,0 +1,40 @@
+# MIPS program to print 2^0 through 2^n for user-specified non-negative n.
+# Values are separated by spaces on a single line.
+# Author: NalanZ
+# <any other notes you wish to add...> No
+#
+
+.data					# data declaration
+PrintSpace:.asciiz " "
+AskString: .asciiz "Enter positive n for 2^n: "
+
+.text					# codes start
+	li      $v0, 4			# code 4 to print string
+	la      $a0, AskString		# print and ask user to input n
+	syscall				# call system
+	li 	$v0, 5			# read int into $v0 as exponent we want
+	syscall				# system call 
+      
+	move 	$t0, $v0		# move input into $t0 as loop counter
+	add	$t0, $t0, 1		# add 1 to take count on 2^0 which takes a seat but not counted in n
+	li	$t1, 1			# starting at 2^0 = 1
+   
+   
+loop: 					# loop started
+	li 	$v0, 1			# code 1 to print int
+	move 	$a0, $t1		# print t1, which is a temp for what is our exponent now
+	syscall				# system call
+	
+	li 	$v0, 4			# code 4 to print string
+	la 	$a0, PrintSpace		# print a space between exponents
+	syscall				# system call
+	
+	add 	$t1, $t1, $t1		# update and doubled $t1, which equals to times 2
+	add 	$t0, $t0, -1		# decrease the loop counter by 1	
+	bgtz 	$t0, loop		# repeat while not finished
+	
+					# loop ended
+	
+	li 	$v0, 10			# code 10 to exit
+	syscall				# system call
+	
